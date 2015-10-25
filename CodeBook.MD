@@ -62,7 +62,7 @@ Default actions when the run_analysis.R is sourced:
 ```{r}
 full.data <- clean()
 grouped.data <- grouped.means()
-write.table(grouped.data,file="grouped_data.txt")
+write.table(grouped.data, file="grouped_data.txt", row.name=FALSE)
 ```
 
 
