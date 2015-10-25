@@ -69,7 +69,7 @@ Default actions when the run_analysis.R script is sourced. The clean() function 
 ```{r}
 full.data <- clean()
 grouped.data <- grouped.means()
-write.table(grouped.data, file="grouped_data.txt", row.name=FALSE)
+write.table(grouped.data, file="grouped_data.txt", row.names=FALSE)
 ```
 
 ### Variable Names

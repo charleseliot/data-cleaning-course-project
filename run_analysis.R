@@ -95,4 +95,4 @@ grouped.means <- function(df=data.frame()){
 
 full.data <- clean()
 grouped.data <- grouped.means(full.data)
-write.table(grouped.data, file="grouped_data.txt", row.name=FALSE)
+write.table(grouped.data, file="grouped_data.txt", row.names=FALSE)
