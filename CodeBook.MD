@@ -1,7 +1,7 @@
 ---
 title: "CodeBook.MD"
 author: "Charles Eliot"
-date: "October 17, 2015"
+date: "October 25, 2015"
 output: html_document
 ---
 
@@ -9,8 +9,14 @@ output: html_document
 
 Downloaded raw data from https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip on 10/7/2015
 
-Extracted zip file to RawData sub-directory
+Extracted zip file and used top-level directory for working directory
 
+UCI HAR Dataset  <<< Code assumes that this is the working directory  
+  |  
+  |-- test  
+  |  
+  |-- train  
+  
 Investigated the various file formats (HexEdit is a very useful tool for this)
 
 - features.txt is an LF-delimited list of 561 feature names. Each line consists of an ID value and the name of the feature, separated by white space. These will become column IDs in our tidy data set. features_info.txt gives more information about the variables.
@@ -25,25 +31,45 @@ Investigated the various file formats (HexEdit is a very useful tool for this)
 
 ### Data Cleaning Script
 
-script = run_analysis.R   
+script = run_analysis.R
+
 cleaning function = Clean()  
+analysis function = grouped.means()  
 
 ```{r}
 Clean <- function(directory=".\\"){
 # Input:
 #   directory - location of the HAR raw data. Default = current working directory.
 # Output:
-#   data frame with the tidy data set
+#   data frame with the ungrouped tidy data set
 
-.
-.
-.
+...
 }
 ```
 
+```{r}
+grouped.means <- function(df=data.frame()){
+# Input:
+#   df - ungrouped data, as returned by clean()
+# Output:
+#   data frame with data grouped by activity and subject, aggregated as means 
+
+...
+}
+```
+Default actions when the run_analysis.R is sourced:
+
+```{r}
+full.data <- clean()
+grouped.data <- grouped.means()
+write.table(grouped.data,file="grouped_data.txt")
+```
+
+
+
 ### Variable Names
 
-Variable names for observed values are derived from the features.txt file. Only variables containing either "mean()" or "std()" are kept, corresponding to the mean and standard deviation of values computed from the 128-sample inertial signal windows. (The filtering excludes variables with "meanFreq()" in the name. "meanFreq" variables are not simple means; they are weighted averages from the frequency (FFT) domain intended to convey the dominant frequency of a sample.)
+Variable names for observed values are derived from the features.txt file. Only variables containing either "mean()" or "std()" are kept, corresponding to the mean and standard deviation of values computed from the 128-sample inertial signal windows. (The filtering also excludes variables with "meanFreq()" in the name. "meanFreq" variables are not simple means; they are weighted averages from the frequency (FFT) domain, intended to convey the dominant frequency of a sample.)
 
 Recipe for forming variable names:  
 
@@ -62,101 +88,78 @@ tBodyAcc-std()-Y --> tbodyacc\_std\_y
 fBodyGyro-std()-X --> bodygyrofreq\_std\_z  
 fBodyBodyGyroJerkMag-mean() --> bodygyrojerkmagfreq\_mean  
 
-Note: including underscores departs slightly from the class standard, but is done to separate the syntactically important sub-elements of the variable name - measurement / processing / axis. Elements of the measurement could have been further expanded - "acc" to "acceleration", "gyro" to "gyroscope" - but at the risk of making names that were already getting long and hard to read even more so. 
+Note: including underscores departs slightly from the group standard, but is done to separate the syntactically important sub-elements of the variable name - measurement / processing / axis. Elements of the measurement could have been further expanded - "acc" to "acceleration", "gyro" to "gyroscope" - but at the risk of making names that were already getting long and hard to read even more so. 
 
 ### Final Variable Set
 
 Column # | Column Name          | Description
 ---------|----------------------|------------
-1        | subjectid            | Experimental subject's ID number  
-2        | activityname         | Experimental activity  
-3        | experimenttype       | TRAINING or TRIAL
-4        | bodyacc\_mean\_x     | Columns 4-69 are derived from the feature names in features.txt. The conversion algorithm is described above. Refer to features_info.txt for more details about what each variable represents.
-5        | bodyacc\_mean\_y     |  
-6        | bodyacc\_mean\_z     |   
-7        | bodyacc\_std\_x      |  
-8        | bodyacc\_std\_y      |  
-9        | bodyacc\_std\_z  
-10       | gravityacc\_mean\_x  
-11       | gravityacc\_mean\_y  
-12       | gravityacc\_mean\_z  
-13       | gravityacc\_std\_x  
-14       | gravityacc\_std\_y  
-15       | gravityacc\_std\_z  
-16       | bodyaccjerk\_mean\_x  
-17       | bodyaccjerk\_mean\_y  
-18       | bodyaccjerk\_mean\_z  
-19       | bodyaccjerk\_std\_x  
-20       | bodyaccjerk\_std\_y  
-21       | bodyaccjerk\_std\_z  
-22       | bodygyro\_mean\_x  
-23       | bodygyro\_mean\_y  
-24       | bodygyro\_mean\_z  
-25       | bodygyro\_std\_x  
-26       | bodygyro\_std\_y  
-27       | bodygyro\_std\_z  
-28       | bodygyrojerk\_mean\_x  
-29       | bodygyrojerk\_mean\_y  
-30       | bodygyrojerk\_mean\_z  
-31       | bodygyrojerk\_std\_x  
-32       | bodygyrojerk\_std\_y  
-33       | bodygyrojerk\_std\_z  
-34       | bodyaccmag\_mean  
-35       | bodyaccmag\_std  
-36       | gravityaccmag\_mean  
-37       | gravityaccmag\_std  
-38       | bodyaccjerkmag\_mean  
-39       | bodyaccjerkmag\_std  
-40       | bodygyromag\_mean  
-41       | bodygyromag\_std  
-42       | bodygyrojerkmag\_mean  
-43       | bodygyrojerkmag\_std  
-44       | bodyaccfreq\_mean\_x  
-45       | bodyaccfreq\_mean\_y  
-46       | bodyaccfreq\_mean\_z  
-47       | bodyaccfreq\_std\_x  
-48       | bodyaccfreq\_std\_y  
-49       | bodyaccfreq\_std\_z  
-50       | bodyaccjerkfreq\_mean\_x  
-51       | bodyaccjerkfreq\_mean\_y  
-52       | bodyaccjerkfreq\_mean\_z  
-53       | bodyaccjerkfreq\_std\_x  
-54       | bodyaccjerkfreq\_std\_y  
-55       | bodyaccjerkfreq\_std\_z  
-56       | bodygyrofreq\_mean\_x  
-57       | bodygyrofreq\_mean\_y  
-58       | bodygyrofreq\_mean\_z  
-59       | bodygyrofreq\_std\_x  
-60       | bodygyrofreq\_std\_y  
-61       | bodygyrofreq\_std\_z  
-62       | bodyaccmagfreq\_mean  
-63       | bodyaccmagfreq\_std  
-64       | bodyaccjerkmagfreq\_mean  
-65       | bodyaccjerkmagfreq\_std  
-66       | bodygyromagfreq\_mean  
-67       | bodygyromagfreq\_std  
-68       | bodygyrojerkmagfreq\_mean  
-69       | bodygyrojerkmagfreq\_std  
+1        | subject              | Experimental subject's ID number  
+2        | activity             | Experimental activity  
+3        | bodyacc\_mean\_x     | Columns 3-68 are derived from the feature names in features.txt. The conversion algorithm is described above. Refer to features_info.txt for more details about what each variable represents.
+4        | bodyacc\_mean\_y     |  
+5        | bodyacc\_mean\_z     |   
+6        | bodyacc\_std\_x      |  
+7        | bodyacc\_std\_y      |  
+8        | bodyacc\_std\_z  
+9        | gravityacc\_mean\_x  
+10       | gravityacc\_mean\_y  
+11       | gravityacc\_mean\_z  
+12       | gravityacc\_std\_x  
+13       | gravityacc\_std\_y  
+14       | gravityacc\_std\_z  
+15       | bodyaccjerk\_mean\_x  
+16       | bodyaccjerk\_mean\_y  
+17       | bodyaccjerk\_mean\_z  
+18       | bodyaccjerk\_std\_x  
+19       | bodyaccjerk\_std\_y  
+20       | bodyaccjerk\_std\_z  
+21       | bodygyro\_mean\_x  
+22       | bodygyro\_mean\_y  
+23       | bodygyro\_mean\_z  
+24       | bodygyro\_std\_x  
+25       | bodygyro\_std\_y  
+26       | bodygyro\_std\_z  
+27       | bodygyrojerk\_mean\_x  
+28       | bodygyrojerk\_mean\_y  
+29       | bodygyrojerk\_mean\_z  
+30       | bodygyrojerk\_std\_x  
+31       | bodygyrojerk\_std\_y  
+32       | bodygyrojerk\_std\_z  
+33       | bodyaccmag\_mean  
+34       | bodyaccmag\_std  
+35       | gravityaccmag\_mean  
+36       | gravityaccmag\_std  
+37       | bodyaccjerkmag\_mean  
+38       | bodyaccjerkmag\_std  
+39       | bodygyromag\_mean  
+40       | bodygyromag\_std  
+41       | bodygyrojerkmag\_mean  
+42       | bodygyrojerkmag\_std  
+43       | bodyaccfreq\_mean\_x  
+44       | bodyaccfreq\_mean\_y  
+45       | bodyaccfreq\_mean\_z  
+46       | bodyaccfreq\_std\_x  
+47       | bodyaccfreq\_std\_y  
+48       | bodyaccfreq\_std\_z  
+49       | bodyaccjerkfreq\_mean\_x  
+50       | bodyaccjerkfreq\_mean\_y  
+51       | bodyaccjerkfreq\_mean\_z  
+52       | bodyaccjerkfreq\_std\_x  
+53       | bodyaccjerkfreq\_std\_y  
+54       | bodyaccjerkfreq\_std\_z  
+55       | bodygyrofreq\_mean\_x  
+56       | bodygyrofreq\_mean\_y  
+57       | bodygyrofreq\_mean\_z  
+58       | bodygyrofreq\_std\_x  
+59       | bodygyrofreq\_std\_y  
+60       | bodygyrofreq\_std\_z  
+61       | bodyaccmagfreq\_mean  
+62       | bodyaccmagfreq\_std  
+63       | bodyaccjerkmagfreq\_mean  
+64       | bodyaccjerkmagfreq\_std  
+65       | bodygyromagfreq\_mean  
+66       | bodygyromagfreq\_std  
+67       | bodygyrojerkmagfreq\_mean  
+68       | bodygyrojerkmagfreq\_std  
 
-
-
-
-
-
-
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r}
-summary(cars)
-```
-
-You can also embed plots, for example:
-
-```{r, echo=FALSE}
-plot(cars)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
