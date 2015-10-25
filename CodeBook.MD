@@ -7,27 +7,29 @@ output: html_document
 
 ## Study Design
 
-Information about the original experimental design and data gathering is in the README.txt file of the downleaded data set.
+Information about the original experimental design and data gathering is in the README.txt file of the downloaded data set.
 
 ### Activities
 
 Downloaded raw data from https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip on 10/7/2015
 
-Extracted zip file and used top-level directory for working directory
+Extracted the zip file and used the top-level directory as the working directory for R-based analysis
 
-UCI HAR Dataset  <<< The analysis code assumes that this is the working directory  
-  |  
-  |-- test  
-  |  
-  |-- train  
-  
+```{r}
+-- UCI HAR Dataset  <<< The analysis code assumes that this is the working directory  
+     |  
+     |-- test  
+     |  
+     |-- train  
+```
+
 Investigated the various file formats (HexEdit is a very useful tool for this)
 
 - features.txt is an LF-delimited list of 561 feature names. Each line consists of an ID value and the name of the feature, separated by white space. These will become column IDs in our tidy data set. features_info.txt gives more information about the variables.
 
 - activity\_labels.txt is an LF-delimited list of activity names ("WALKING", "SITTING", etc). Each line consists of an ID value and the name of the activity separated by white space. Activities are identified in the observational data by the activity ID, so the data from activity_labels.txt will be used to replace activity IDs with more descriptive activity names in our tidy data set.
 
-- test\\X\_test.txt and train\\X\_train.txt are LF-delimited lists of observations. Each line consists of 561 values separated by white space. The 561 variables map to the features listed in features.txt. These data will be combined in our final tidy data set.
+- test\\X\_test.txt and train\\X\_train.txt are LF-delimited lists of observations. Each line consists of 561 values separated by white space. The 561 variables map to the features listed in features.txt. These data (training and testing) will be combined in the final tidy data set.
 
 - test\\subject\_test.txt and train\\subject\_train.txt are LF-delimited lists of subject IDs in text format ("1", "2", etc). Each line corresponds to one of the observations in X\_test.txt or X\_train.txt respectively. Sanity check: nrow(subject\_train) == nrow(X\_train), and nrow(subject\_test) == nrow(X\_test).
 
@@ -61,7 +63,8 @@ grouped.means <- function(df=data.frame()){
 ...
 }
 ```
-Default actions when the run_analysis.R script is sourced:
+
+Default actions when the run_analysis.R script is sourced. The clean() function takes the location of the raw data as an argument, and defaults to the current working directory.
 
 ```{r}
 full.data <- clean()
