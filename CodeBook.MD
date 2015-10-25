@@ -5,13 +5,17 @@ date: "October 25, 2015"
 output: html_document
 ---
 
+## Study Design
+
+Information about the original experimental design and data gathering is in the README.txt file of the downleaded data set.
+
 ### Activities
 
 Downloaded raw data from https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip on 10/7/2015
 
 Extracted zip file and used top-level directory for working directory
 
-UCI HAR Dataset  <<< Code assumes that this is the working directory  
+UCI HAR Dataset  <<< The analysis code assumes that this is the working directory  
   |  
   |-- test  
   |  
@@ -33,11 +37,11 @@ Investigated the various file formats (HexEdit is a very useful tool for this)
 
 script = run_analysis.R
 
-cleaning function = Clean()  
+cleaning function = clean()  
 analysis function = grouped.means()  
 
 ```{r}
-Clean <- function(directory=".\\"){
+clean <- function(directory=".\\"){
 # Input:
 #   directory - location of the HAR raw data. Default = current working directory.
 # Output:
@@ -57,15 +61,13 @@ grouped.means <- function(df=data.frame()){
 ...
 }
 ```
-Default actions when the run_analysis.R is sourced:
+Default actions when the run_analysis.R script is sourced:
 
 ```{r}
 full.data <- clean()
 grouped.data <- grouped.means()
 write.table(grouped.data, file="grouped_data.txt", row.name=FALSE)
 ```
-
-
 
 ### Variable Names
 
@@ -90,9 +92,9 @@ fBodyBodyGyroJerkMag-mean() --> bodygyrojerkmagfreq\_mean
 
 Note: including underscores departs slightly from the group standard, but is done to separate the syntactically important sub-elements of the variable name - measurement / processing / axis. Elements of the measurement could have been further expanded - "acc" to "acceleration", "gyro" to "gyroscope" - but at the risk of making names that were already getting long and hard to read even more so. 
 
-### Final Variable Set
+## Code Book
 
-Column # | Column Name          | Description
+Column # | Variable Name        | Description
 ---------|----------------------|------------
 1        | subject              | Experimental subject's ID number  
 2        | activity             | Experimental activity  
