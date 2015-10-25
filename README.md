@@ -4,8 +4,11 @@ Sourcing run_analysis.R will write a data frame of the full cleaned data to full
 
 More implementation information is in the run_analysis.R comments.
 
+cleaning function = clean()  
+analysis function = grouped.means()  
+
 ```{r}
-Clean <- function(directory=".\\"){
+clean <- function(directory=".\\"){
 # Input:
 #   directory - location of the HAR raw data. Default = current working directory.
 # Output:
